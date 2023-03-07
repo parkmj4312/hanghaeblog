@@ -1,8 +1,10 @@
 package com.sparta.hanghaeblog.controller;
 
 import com.sparta.hanghaeblog.dto.BoardRequestDto;
+import com.sparta.hanghaeblog.dto.BoardResponseDto;
 import com.sparta.hanghaeblog.entity.Board;
 import com.sparta.hanghaeblog.service.BoardService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,9 +23,11 @@ public class BoardController {
         return boardService.getBoards();
     }
 
+    @ResponseBody
     @PostMapping("/api/boards")
-    public Board createBoard(@RequestBody BoardRequestDto requestDto) {
-        return boardService.createBoard(requestDto);
+    public BoardResponseDto createBoard(@RequestBody BoardRequestDto requestDto, HttpServletRequest request) {
+        BoardResponseDto board = boardService.createBoard(requestDto, request);
+        return board;
     }
 
     @GetMapping("/api/boards")
@@ -35,13 +39,16 @@ public class BoardController {
         return boardService.getBoard(id);
     }
     @PutMapping("/api/boards/{id}")
-    public Board updateBoard(@PathVariable Long id, @RequestBody BoardRequestDto requestDto) {
-        return boardService.update(id, requestDto);
+    public BoardResponseDto updateBoard(@PathVariable Long id, @RequestBody BoardRequestDto requestDto, HttpServletRequest request) {
+        return boardService.update(id, requestDto, request);
     }
 
     @DeleteMapping("/api/boards/{id}")
-    public String deleteBoard(@PathVariable Long id, @RequestBody BoardRequestDto requestDto) {
-        return boardService.deleteBoard(id, requestDto);
+    public String deleteBoard(@PathVariable Long id, @RequestBody BoardRequestDto requestDto, HttpServletRequest request) {
+
+        return new String(boardService.deleteBoard(id, requestDto,request));
     }
+
+
 
 }

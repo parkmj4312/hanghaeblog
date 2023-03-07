@@ -1,12 +1,11 @@
 package com.sparta.hanghaeblog.dto;
 
 import lombok.Getter;
+import lombok.Setter;
 
+@Setter
 @Getter
-public class BoardRequestDto {
-    private String title;
+public class LoginRequestDto {
     private String username;
-    private String contents;
-
-
+    private String password;
 }
