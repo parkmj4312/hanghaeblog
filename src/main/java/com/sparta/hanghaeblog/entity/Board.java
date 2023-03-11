@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Getter
 @Entity
 @NoArgsConstructor
@@ -20,7 +22,8 @@ public class Board extends Timestamped{
     private String contents;
     @Column(nullable = false)
     private Long userId;
-
+    @OneToMany
+    private List<Comment> commentList;
 
     public Board(String title, String username, String contents) {
         this.title = title;
@@ -42,9 +45,17 @@ public class Board extends Timestamped{
         this.userId = userId;
     }
 
+    public Board(Board board, List<Comment> commentList) {
+        this.title = board.getTitle();
+        this.username = board.getUsername();
+        this.contents = board.getContents();
+        this.commentList = commentList;
+    }
+
     public void update(BoardRequestDto boardRequestDto) {
         this.title = boardRequestDto.getTitle();
         this.username = boardRequestDto.getUsername();
         this.contents = boardRequestDto.getContents();
+        this.commentList = boardRequestDto.getCommentList();
     }
 }

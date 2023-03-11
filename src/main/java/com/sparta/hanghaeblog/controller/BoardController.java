@@ -35,7 +35,7 @@ public class BoardController {
         return boardService.getBoards();
     }
     @GetMapping("/api/boards/{id}")
-    public Optional<Board> selectBoard(@PathVariable Long id) {
+    public Board selectBoard(@PathVariable Long id) {
         return boardService.getBoard(id);
     }
     @PutMapping("/api/boards/{id}")

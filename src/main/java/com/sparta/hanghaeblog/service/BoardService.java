@@ -2,6 +2,8 @@ package com.sparta.hanghaeblog.service;
 
 import com.sparta.hanghaeblog.dto.BoardRequestDto;
 import com.sparta.hanghaeblog.dto.BoardResponseDto;
+import com.sparta.hanghaeblog.dto.CommentRequestDto;
+import com.sparta.hanghaeblog.dto.CommentResponseDto;
 import com.sparta.hanghaeblog.entity.Board;
 import com.sparta.hanghaeblog.entity.User;
 import com.sparta.hanghaeblog.repository.BoardRepository;
@@ -53,13 +55,17 @@ public class BoardService {
     }
 
     @Transactional(readOnly = true)
-    public List<Board> getBoards() {
-        return boardRepository.findAllByOrderByCreatedAtAsc();
+    public List<Board> getBoards()
+    {
+        List<Board> board = boardRepository.findAllByOrderByCreatedAtAsc();
+
+        return board;
     }
 
     @Transactional(readOnly = true)
-    public Optional<Board> getBoard(long id) {
-        return boardRepository.findById(id);
+    public Board getBoard(long id) {
+        return boardRepository.findById(id).orElseThrow(
+                () -> new IllegalArgumentException("게시글이 존재하지 않습니다."));
     }
 
     @Transactional
@@ -91,29 +97,10 @@ public class BoardService {
             return null;
         }
 
-
-//        Board board = boardRepository.findById(id).orElseThrow(
-//                () -> new IllegalArgumentException("아이디가 존재하지 않습니다.")
-//        );
-//        if(board.getPassword().equals(requestDto.getPassword())){
-//            board.update(requestDto);
-//            return board;
-//        }else{
-//            return board;
-//        }
-
-
     }
 
     @Transactional
     public String deleteBoard(Long id,BoardRequestDto requestDto, HttpServletRequest request) {
-
-//        if(board.getPassword().equals(requestDto.getPassword())){
-//            boardRepository.deleteById(id);
-//            return "삭제에 성공 했습니다.";
-//        }else{
-//            return "비밀번호가 틀렸습니다..";
-//        }
 
         // Request에서 Token 가져오기
         String token = jwtUtil.resolveToken(request);
@@ -144,7 +131,5 @@ public class BoardService {
         } else {
             return "토큰이 없습니다.";
         }
-
-
     }
 }
