@@ -23,15 +23,17 @@ public class Comment extends Timestamped{
 //    @JoinColumn(name = "BOARD_ID", nullable = false)
 //    @ManyToOne
 //    private Board board;
-    @Column(nullable = false)
-    private Long userId;
-    @Column(nullable = false)
-    private Long boardId;
+    @ManyToOne
+    @JoinColumn(name = "USER_ID",nullable = false)
+    private User user;
+    @ManyToOne
+    @JoinColumn(name = "BOARD_ID",nullable = false)
+    private Board board;
 
-    public Comment(CommentRequestDto requestDto, Long userId, Long boardId) {
+    public Comment(CommentRequestDto requestDto, User user, Board board) {
         this.username = requestDto.getUsername();
         this.contents = requestDto.getContents();
-        this.userId = userId;
-        this.boardId = boardId;
+        this.user = user;
+        this.board = board;
     }
 }

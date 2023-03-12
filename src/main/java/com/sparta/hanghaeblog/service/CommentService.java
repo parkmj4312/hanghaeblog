@@ -47,7 +47,7 @@ public class CommentService {
                     () -> new IllegalArgumentException("해당 게시물이 존재하지 않습니다.")
             );
             // 요청받은 DTO 로 DB에 저장할 객체 만들기
-            Comment comment = commentRepository.saveAndFlush(new Comment(requestDto,user.getId(),board.getId()));
+            Comment comment = commentRepository.saveAndFlush(new Comment(requestDto,user,board));
 
             return new CommentResponseDto(comment);
         } else {

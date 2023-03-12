@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -20,10 +21,12 @@ public class Board extends Timestamped{
     private String username;
     @Column(nullable = false)
     private String contents;
-    @Column(nullable = false)
-    private Long userId;
-    @OneToMany
-    private List<Comment> commentList;
+    @ManyToOne
+    @JoinColumn(name = "USER_ID", nullable = false)
+    private User user;
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "board")
+    private List<Comment> commentList = new ArrayList<>();
 
     public Board(String title, String username, String contents) {
         this.title = title;
@@ -38,24 +41,15 @@ public class Board extends Timestamped{
 
     }
 
-    public Board(BoardRequestDto requestDto, Long userId) {
+    public Board(BoardRequestDto requestDto, User user) {
         this.title = requestDto.getTitle();
         this.username = requestDto.getUsername();
         this.contents = requestDto.getContents();
-        this.userId = userId;
+        this.user = user;
     }
-
-    public Board(Board board, List<Comment> commentList) {
-        this.title = board.getTitle();
-        this.username = board.getUsername();
-        this.contents = board.getContents();
-        this.commentList = commentList;
-    }
-
     public void update(BoardRequestDto boardRequestDto) {
         this.title = boardRequestDto.getTitle();
         this.username = boardRequestDto.getUsername();
         this.contents = boardRequestDto.getContents();
-        this.commentList = boardRequestDto.getCommentList();
     }
 }

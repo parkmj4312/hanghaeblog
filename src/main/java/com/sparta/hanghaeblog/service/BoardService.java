@@ -2,9 +2,9 @@ package com.sparta.hanghaeblog.service;
 
 import com.sparta.hanghaeblog.dto.BoardRequestDto;
 import com.sparta.hanghaeblog.dto.BoardResponseDto;
-import com.sparta.hanghaeblog.dto.CommentRequestDto;
 import com.sparta.hanghaeblog.dto.CommentResponseDto;
 import com.sparta.hanghaeblog.entity.Board;
+import com.sparta.hanghaeblog.entity.Comment;
 import com.sparta.hanghaeblog.entity.User;
 import com.sparta.hanghaeblog.repository.BoardRepository;
 import com.sparta.hanghaeblog.repository.UserRepository;
@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,7 +47,7 @@ public class BoardService {
             );
 
             // 요청받은 DTO 로 DB에 저장할 객체 만들기
-            Board board = boardRepository.saveAndFlush(new Board(requestDto, user.getId()));
+            Board board = boardRepository.saveAndFlush(new Board(requestDto, user));
 
             return new BoardResponseDto(board);
         } else {
@@ -55,11 +56,24 @@ public class BoardService {
     }
 
     @Transactional(readOnly = true)
-    public List<Board> getBoards()
+    public List<BoardResponseDto> getBoards()
     {
-        List<Board> board = boardRepository.findAllByOrderByCreatedAtAsc();
+        List<Board> boardLisgt = boardRepository.findAllByOrderByCreatedAtAsc();
+        List<BoardResponseDto> responseDtos = new ArrayList<>();
 
-        return board;
+        for(Board board : boardLisgt){
+            List<CommentResponseDto> commentResponseList = getCommentResponseList(board);
+            responseDtos.add(new BoardResponseDto(board,commentResponseList));
+        }
+
+        return responseDtos;
+    }
+    private  List<CommentResponseDto> getCommentResponseList (Board board) {
+        List<CommentResponseDto> replyResponseList = new ArrayList<>();
+        for (Comment comment : board.getCommentList()) {
+            replyResponseList.add(new CommentResponseDto(comment));
+        }
+        return replyResponseList;
     }
 
     @Transactional(readOnly = true)
@@ -89,7 +103,7 @@ public class BoardService {
                     () -> new IllegalArgumentException("게시글이 존재하지 않습니다.")
             );
             // 요청받은 DTO 로 DB에 저장할 객체 만들기
-            if(board.getUserId() == user.getId()){
+            if(board.getUser().getId() == user.getId()){
                 board.update(requestDto);
             }
             return new BoardResponseDto(board);
@@ -121,7 +135,7 @@ public class BoardService {
                     () -> new IllegalArgumentException("게시글이 존재하지 않습니다.")
             );
             // 요청받은 DTO 로 DB에 저장할 객체 만들기
-            if(board.getUserId() == user.getId()){
+            if(board.getUser().getId() == user.getId()){
                 boardRepository.deleteById(id);
                 return "게시글을 삭제하였습니다.";
             }else{

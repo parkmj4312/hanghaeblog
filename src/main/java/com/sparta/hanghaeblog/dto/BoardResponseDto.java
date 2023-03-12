@@ -2,9 +2,11 @@ package com.sparta.hanghaeblog.dto;
 
 import com.sparta.hanghaeblog.entity.Board;
 import com.sparta.hanghaeblog.entity.Comment;
+import com.sparta.hanghaeblog.entity.User;
 import jakarta.persistence.OneToMany;
 import lombok.Getter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -13,22 +15,19 @@ public class BoardResponseDto {
     private String title;
     private String username;
     private String contents;
-    private Long userId;
-    private List<Comment> commentList;
+    private List<CommentResponseDto> commentList = new ArrayList<>();
 
     public BoardResponseDto(Board board) {
         this.title = board.getTitle();
         this.username = board.getUsername();
         this.contents = board.getContents();
-        this.userId = board.getUserId();
         this.id = board.getId();
     }
-    public BoardResponseDto(Board board, List<Comment> commentList) {
+    public BoardResponseDto(Board board, List<CommentResponseDto> commentList) {
         this.title = board.getTitle();
         this.username = board.getUsername();
         this.contents = board.getContents();
-        this.userId = board.getUserId();
-        this.id = board.getId();;
+        this.id = board.getId();
         this.commentList = commentList;
     }
 }

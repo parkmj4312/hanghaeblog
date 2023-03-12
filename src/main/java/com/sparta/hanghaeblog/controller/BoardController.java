@@ -6,6 +6,7 @@ import com.sparta.hanghaeblog.entity.Board;
 import com.sparta.hanghaeblog.service.BoardService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,7 +19,7 @@ public class BoardController {
     private final BoardService boardService;
 
     @GetMapping("/")
-    public List<Board> home() {
+    public List<BoardResponseDto> home() {
         //return new ModelAndView("index");
         return boardService.getBoards();
     }
@@ -31,8 +32,9 @@ public class BoardController {
     }
 
     @GetMapping("/api/boards")
-    public List<Board> getBoards() {
-        return boardService.getBoards();
+    public List<BoardResponseDto> getBoards() {
+        List<BoardResponseDto> boards = boardService.getBoards();
+        return boards;
     }
     @GetMapping("/api/boards/{id}")
     public Board selectBoard(@PathVariable Long id) {

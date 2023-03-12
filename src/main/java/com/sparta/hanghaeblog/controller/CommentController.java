@@ -23,11 +23,4 @@ public class CommentController {
         CommentResponseDto comment = commentService.createComment(requestDto,id,request);
         return comment;
     }
-
-    @GetMapping("/api/boards/{id}/comments")
-    public BoardResponseDto getComments(@PathVariable Long id)
-    {
-        BoardResponseDto responseDto = new BoardResponseDto(boardService.getBoard(id),commentService.getComments(id));
-        return responseDto;
-    }
 }
