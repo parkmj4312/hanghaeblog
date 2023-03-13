@@ -6,10 +6,13 @@ import com.sparta.hanghaeblog.entity.Board;
 import com.sparta.hanghaeblog.service.BoardService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -37,18 +40,18 @@ public class BoardController {
         return boards;
     }
     @GetMapping("/api/boards/{id}")
-    public Board selectBoard(@PathVariable Long id) {
+    public BoardResponseDto selectBoard(@PathVariable Long id) {
         return boardService.getBoard(id);
     }
     @PutMapping("/api/boards/{id}")
-    public BoardResponseDto updateBoard(@PathVariable Long id, @RequestBody BoardRequestDto requestDto, HttpServletRequest request) {
+    public ResponseEntity<Map<String, HttpStatus>> updateBoard(@PathVariable Long id, @RequestBody BoardRequestDto requestDto, HttpServletRequest request) {
         return boardService.update(id, requestDto, request);
     }
 
     @DeleteMapping("/api/boards/{id}")
-    public String deleteBoard(@PathVariable Long id, @RequestBody BoardRequestDto requestDto, HttpServletRequest request) {
+    public ResponseEntity<Map<String, HttpStatus>> deleteBoard(@PathVariable Long id, @RequestBody BoardRequestDto requestDto, HttpServletRequest request) {
 
-        return new String(boardService.deleteBoard(id, requestDto,request));
+        return boardService.deleteBoard(id, requestDto,request);
     }
 
 

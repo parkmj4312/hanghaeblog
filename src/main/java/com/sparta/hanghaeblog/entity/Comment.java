@@ -17,12 +17,7 @@ public class Comment extends Timestamped{
     private String username;
     @Column(nullable = false)
     private String contents;
-//    @JoinColumn(name = "USER_ID", nullable = false)
-//    @ManyToOne
-//    private User user;
-//    @JoinColumn(name = "BOARD_ID", nullable = false)
-//    @ManyToOne
-//    private Board board;
+
     @ManyToOne
     @JoinColumn(name = "USER_ID",nullable = false)
     private User user;
@@ -35,5 +30,10 @@ public class Comment extends Timestamped{
         this.contents = requestDto.getContents();
         this.user = user;
         this.board = board;
+    }
+
+    public void update(CommentRequestDto commentRequestDto) {
+        this.username = commentRequestDto.getUsername();
+        this.contents = commentRequestDto.getContents();
     }
 }

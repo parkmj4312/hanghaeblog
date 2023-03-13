@@ -4,11 +4,15 @@ import com.sparta.hanghaeblog.dto.LoginRequestDto;
 import com.sparta.hanghaeblog.dto.SignupRequestDto;
 import com.sparta.hanghaeblog.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import jakarta.servlet.http.HttpServletResponse;
+
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -28,16 +32,14 @@ public class UserController {
     }
     @ResponseBody
     @PostMapping("/signup")
-    public String signup(@RequestBody SignupRequestDto signupRequestDto) {
-        userService.signup(signupRequestDto);
-        return "가입 되었습니다.";
+    public ResponseEntity<Map<String, HttpStatus>> signup(@RequestBody SignupRequestDto signupRequestDto) {
+        return userService.signup(signupRequestDto);
     }
 
     @ResponseBody
     @PostMapping("/login")
-    public String login(@RequestBody LoginRequestDto loginRequestDto, HttpServletResponse response) {
-        userService.login(loginRequestDto, response);
-        return "로그인 되었습니다.";
+    public ResponseEntity<Map<String, HttpStatus>> login(@RequestBody LoginRequestDto loginRequestDto, HttpServletResponse response) {
+        return userService.login(loginRequestDto, response);
     }
 
 }
