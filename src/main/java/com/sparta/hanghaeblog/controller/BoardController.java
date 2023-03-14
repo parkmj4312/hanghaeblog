@@ -2,18 +2,16 @@ package com.sparta.hanghaeblog.controller;
 
 import com.sparta.hanghaeblog.dto.BoardRequestDto;
 import com.sparta.hanghaeblog.dto.BoardResponseDto;
-import com.sparta.hanghaeblog.entity.Board;
+import com.sparta.hanghaeblog.security.UserDetailsImpl;
 import com.sparta.hanghaeblog.service.BoardService;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,8 +27,8 @@ public class BoardController {
 
     @ResponseBody
     @PostMapping("/api/boards")
-    public BoardResponseDto createBoard(@RequestBody BoardRequestDto requestDto, HttpServletRequest request) {
-        BoardResponseDto board = boardService.createBoard(requestDto, request);
+    public BoardResponseDto createBoard(@RequestBody BoardRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        BoardResponseDto board = boardService.createBoard(requestDto, userDetails.getUser());
         return board;
     }
 
@@ -44,14 +42,14 @@ public class BoardController {
         return boardService.getBoard(id);
     }
     @PutMapping("/api/boards/{id}")
-    public ResponseEntity<Map<String, HttpStatus>> updateBoard(@PathVariable Long id, @RequestBody BoardRequestDto requestDto, HttpServletRequest request) {
-        return boardService.update(id, requestDto, request);
+    public ResponseEntity<Map<String, HttpStatus>> updateBoard(@PathVariable Long id, @RequestBody BoardRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return boardService.update(id, requestDto, userDetails.getUser());
     }
 
     @DeleteMapping("/api/boards/{id}")
-    public ResponseEntity<Map<String, HttpStatus>> deleteBoard(@PathVariable Long id, @RequestBody BoardRequestDto requestDto, HttpServletRequest request) {
+    public ResponseEntity<Map<String, HttpStatus>> deleteBoard(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
-        return boardService.deleteBoard(id, requestDto,request);
+        return boardService.deleteBoard(id,userDetails.getUser());
     }
 
 

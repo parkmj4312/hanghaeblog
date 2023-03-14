@@ -1,13 +1,9 @@
 package com.sparta.hanghaeblog.entity;
 
-import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import jakarta.persistence.*;
-
-import java.util.ArrayList;
-import java.util.List;
+import javax.persistence.*;
 
 @Getter
 @NoArgsConstructor
@@ -20,10 +16,9 @@ public class User {
 
     // nullable: null 허용 여부
     // unique: 중복 허용 여부 (false 일때 중복 허용)
-    @Pattern(regexp = "^[a-z0-9]{4,10}$")
     @Column(nullable = false, unique = true)
     private String username;
-    @Pattern(regexp = "^[a-zA-Z0-9]{8,15}$")
+
     @Column(nullable = false)
     private String password;
 

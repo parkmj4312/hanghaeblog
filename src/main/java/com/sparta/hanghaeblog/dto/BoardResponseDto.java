@@ -1,9 +1,6 @@
 package com.sparta.hanghaeblog.dto;
 
 import com.sparta.hanghaeblog.entity.Board;
-import com.sparta.hanghaeblog.entity.Comment;
-import com.sparta.hanghaeblog.entity.User;
-import jakarta.persistence.OneToMany;
 import lombok.Getter;
 
 import java.util.ArrayList;

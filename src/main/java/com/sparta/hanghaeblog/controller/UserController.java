@@ -10,8 +10,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import jakarta.servlet.http.HttpServletResponse;
 
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.util.Map;
 
 @Controller
@@ -32,7 +33,7 @@ public class UserController {
     }
     @ResponseBody
     @PostMapping("/signup")
-    public ResponseEntity<Map<String, HttpStatus>> signup(@RequestBody SignupRequestDto signupRequestDto) {
+    public ResponseEntity<Map<String, HttpStatus>> signup(@Valid @RequestBody SignupRequestDto signupRequestDto) {
         return userService.signup(signupRequestDto);
     }
 

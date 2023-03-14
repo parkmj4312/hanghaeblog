@@ -5,9 +5,6 @@ import com.sparta.hanghaeblog.entity.Comment;
 import com.sparta.hanghaeblog.entity.User;
 import lombok.Getter;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Getter
 public class CommentResponseDto {
 

@@ -1,10 +1,10 @@
 package com.sparta.hanghaeblog.entity;
 
-import com.sparta.hanghaeblog.dto.BoardRequestDto;
 import com.sparta.hanghaeblog.dto.CommentRequestDto;
-import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
 
 @Getter
 @Entity

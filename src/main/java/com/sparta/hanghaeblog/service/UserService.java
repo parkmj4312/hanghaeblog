@@ -9,11 +9,13 @@ import com.sparta.hanghaeblog.jwt.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 
-import jakarta.servlet.http.HttpServletResponse;
-
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.util.Map;
 import java.util.Optional;
 
@@ -23,12 +25,13 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final JwtUtil jwtUtil;
+    private final PasswordEncoder passwordEncoder;
     private static final String ADMIN_TOKEN = "AAABnvxRVklrnYxKZ0aHgTBcXukeZygoC";
 
     @Transactional
     public ResponseEntity<Map<String,HttpStatus>> signup(SignupRequestDto signupRequestDto) {
         String username = signupRequestDto.getUsername();
-        String password = signupRequestDto.getPassword();
+        String password = passwordEncoder.encode(signupRequestDto.getPassword());
 
         // 회원 중복 확인
         Optional<User> found = userRepository.findByUsername(username);
@@ -61,7 +64,7 @@ public class UserService {
         if(!user.isPresent()){
             return new ResponseEntity("회원을 찾을 수 없습니다.",HttpStatus.BAD_REQUEST);
         }
-        if(!user.get().getPassword().equals(password)){
+        if(!passwordEncoder.matches(password, user.get().getPassword())){
             return new ResponseEntity("회원을 찾을 수 없습니다.",HttpStatus.BAD_REQUEST);
         }
 
