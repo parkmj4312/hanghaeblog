@@ -9,10 +9,6 @@ import com.sparta.hanghaeblog.entity.User;
 import com.sparta.hanghaeblog.entity.UserRoleEnum;
 import com.sparta.hanghaeblog.repository.BoardRepository;
 import com.sparta.hanghaeblog.repository.CommentRepository;
-import com.sparta.hanghaeblog.repository.UserRepository;
-
-import io.jsonwebtoken.Claims;
-import com.sparta.hanghaeblog.jwt.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -81,7 +77,7 @@ public class BoardService {
                 board.update(requestDto);
                 return new ResponseEntity("게시글을 수정 했습니다.",HttpStatus.OK);
             }else{
-                return new ResponseEntity("작성자만 삭제/수정할 수 있습니다.",HttpStatus.BAD_REQUEST);
+                throw new IllegalArgumentException("작성자만 삭제/수정할 수 있습니다.");
             }
     }
 
@@ -97,7 +93,7 @@ public class BoardService {
             boardRepository.deleteById(id);
             return new ResponseEntity("게시글을 삭제 했습니다.", HttpStatus.OK);
         } else {
-            return new ResponseEntity("작성자만 삭제/수정할 수 있습니다.", HttpStatus.BAD_REQUEST);
+            throw new IllegalArgumentException("작성자만 삭제/수정할 수 있습니다.");
         }
 
     }

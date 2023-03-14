@@ -47,14 +47,14 @@ public class CommentService {
     public ResponseEntity<Map<String, HttpStatus>> update(Long id, CommentRequestDto requestDto, User user) {
 
         Comment comment = commentRepository.findById(id).orElseThrow(
-                () -> new IllegalArgumentException("댓글이 존재하지 않습니다.")
+                () ->  new IllegalArgumentException("댓글이 존재하지 않습니다.")
         );
         // 요청받은 DTO 로 DB에 저장할 객체 만들기
         if (comment.getUser().getId() == user.getId() || user.getRole() == UserRoleEnum.ADMIN) {
             comment.update(requestDto);
             return new ResponseEntity("댓글을 수정 했습니다.", HttpStatus.OK);
         } else {
-            return new ResponseEntity("작성자만 삭제/수정할 수 있습니다.", HttpStatus.BAD_REQUEST);
+            throw new IllegalArgumentException("작성자만 삭제/수정할 수 있습니다.");
         }
     }
 
@@ -70,7 +70,7 @@ public class CommentService {
             commentRepository.deleteById(id);
             return new ResponseEntity("댓글을 삭제 했습니다.", HttpStatus.OK);
         } else {
-            return new ResponseEntity("작성자만 삭제/수정할 수 있습니다.", HttpStatus.BAD_REQUEST);
+            throw new IllegalArgumentException("작성자만 삭제/수정할 수 있습니다.");
         }
     }
 }
