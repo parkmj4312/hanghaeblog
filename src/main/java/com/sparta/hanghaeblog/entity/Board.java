@@ -28,18 +28,6 @@ public class Board extends Timestamped{
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "board")
     private List<Comment> commentList = new ArrayList<>();
 
-    public Board(String title, String username, String contents) {
-        this.title = title;
-        this.username = username;
-        this.contents = contents;
-    }
-
-    public Board(BoardRequestDto requestDto) {
-        this.title = requestDto.getTitle();
-        this.username = requestDto.getUsername();
-        this.contents = requestDto.getContents();
-    }
-
     public Board(BoardRequestDto requestDto, User user) {
         this.title = requestDto.getTitle();
         this.username = requestDto.getUsername();

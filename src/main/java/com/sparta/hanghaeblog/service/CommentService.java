@@ -23,7 +23,6 @@ import java.util.Map;
 public class CommentService {
 
     private final BoardRepository boardRepository;
-    private final UserRepository userRepository;
     private final CommentRepository commentRepository;
     private final JwtUtil jwtUtil;
 

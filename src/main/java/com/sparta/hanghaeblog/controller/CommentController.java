@@ -18,7 +18,6 @@ import java.util.Map;
 public class CommentController {
 
     private final CommentService commentService;
-    private final BoardService boardService;
     @ResponseBody
     @PostMapping("/api/boards/{id}/comments")
     public CommentResponseDto createComment(@PathVariable Long id,@RequestBody CommentRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {

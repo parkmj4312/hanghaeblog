@@ -19,12 +19,6 @@ public class CommentResponseDto {
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 
-    public CommentResponseDto(String username, String contents, User user, Board board) {
-        this.username = username;
-        this.contents = contents;
-        this.userId = user.getId();
-        this.boardId = board.getId();
-    }
     public CommentResponseDto(Comment comment) {
         this.id = comment.getId();
         this.username = comment.getUsername();
