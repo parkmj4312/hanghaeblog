@@ -40,7 +40,7 @@ public class CommentService {
 
     @Transactional(readOnly = true)
     public List<Comment> getComments(Long boardId) {
-        return commentRepository.findAllByBoardIdOrderByCreatedAtAsc(boardId);
+        return commentRepository.findAllByBoardIdOrderByCreatedAtDesc(boardId);
     }
 
     @Transactional

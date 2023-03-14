@@ -18,9 +18,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -29,9 +29,7 @@ import java.util.Map;
 public class BoardService {
 
     private final BoardRepository boardRepository;
-    private final UserRepository userRepository;
     private final CommentRepository commentRepository;
-    private final JwtUtil jwtUtil;
 
     @Transactional
     public BoardResponseDto createBoard(BoardRequestDto requestDto,User user) {
@@ -45,11 +43,12 @@ public class BoardService {
     @Transactional(readOnly = true)
     public List<BoardResponseDto> getBoards()
     {
-        List<Board> boardList = boardRepository.findAllByOrderByCreatedAtAsc();
+        List<Board> boardList = boardRepository.findAllByOrderByCreatedAtDesc();
         List<BoardResponseDto> responseDtos = new ArrayList<>();
 
         for(Board board : boardList){
             List<CommentResponseDto> commentResponseList = getCommentResponseList(board);
+            Collections.reverse(commentResponseList);
             responseDtos.add(new BoardResponseDto(board,commentResponseList));
         }
 

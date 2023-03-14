@@ -3,6 +3,7 @@ package com.sparta.hanghaeblog.dto;
 import com.sparta.hanghaeblog.entity.Board;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +13,7 @@ public class BoardResponseDto {
     private String title;
     private String username;
     private String contents;
+    private LocalDateTime createdAt;
     private List<CommentResponseDto> commentList = new ArrayList<>();
 
     public BoardResponseDto(Board board) {
@@ -25,6 +27,7 @@ public class BoardResponseDto {
         this.username = board.getUsername();
         this.contents = board.getContents();
         this.id = board.getId();
+        this.createdAt = board.getCreatedAt();
         this.commentList = commentList;
     }
 }

@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CommentRepository extends JpaRepository<Comment, Long> {
-    List<Comment> findAllByBoardIdOrderByCreatedAtAsc(Long boardId);
+    List<Comment> findAllByBoardIdOrderByCreatedAtDesc(Long boardId);
     Optional<Comment> findByBoardId(Long boardId);
 
     void deleteAllByBoardId(Long boardId);
