@@ -24,6 +24,8 @@ public class Board extends Timestamped{
     @ManyToOne
     @JoinColumn(name = "USER_ID", nullable = false)
     private User user;
+    @Column
+    private int love = 0;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "board")
     private List<Comment> commentList = new ArrayList<>();
@@ -38,5 +40,12 @@ public class Board extends Timestamped{
         this.title = boardRequestDto.getTitle();
         this.username = boardRequestDto.getUsername();
         this.contents = boardRequestDto.getContents();
+    }
+
+    public void LoveOk() {
+        this.love++;
+    }
+    public void LoveCancel() {
+        this.love--;
     }
 }

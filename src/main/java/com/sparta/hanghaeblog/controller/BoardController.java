@@ -52,6 +52,8 @@ public class BoardController {
         return boardService.deleteBoard(id,userDetails.getUser());
     }
 
-
-
+    @PutMapping("/api/boards/{id}/loves")
+    public ResponseEntity<Map<String, HttpStatus>> BoardLoveOk(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return boardService.loveOk(id, userDetails.getUser());
+    }
 }

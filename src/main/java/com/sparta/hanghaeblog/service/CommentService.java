@@ -2,12 +2,9 @@ package com.sparta.hanghaeblog.service;
 
 import com.sparta.hanghaeblog.dto.CommentRequestDto;
 import com.sparta.hanghaeblog.dto.CommentResponseDto;
-import com.sparta.hanghaeblog.entity.Board;
-import com.sparta.hanghaeblog.entity.Comment;
-import com.sparta.hanghaeblog.entity.User;
-import com.sparta.hanghaeblog.entity.UserRoleEnum;
-import com.sparta.hanghaeblog.jwt.JwtUtil;
+import com.sparta.hanghaeblog.entity.*;
 import com.sparta.hanghaeblog.repository.BoardRepository;
+import com.sparta.hanghaeblog.repository.CommentLoveRepository;
 import com.sparta.hanghaeblog.repository.CommentRepository;
 import com.sparta.hanghaeblog.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 import java.util.Map;
 
@@ -24,7 +22,8 @@ public class CommentService {
 
     private final BoardRepository boardRepository;
     private final CommentRepository commentRepository;
-    private final JwtUtil jwtUtil;
+    private final UserRepository userRepository;
+    private final CommentLoveRepository commentLoveRepository;
 
     public CommentResponseDto createComment(CommentRequestDto requestDto, Long id, User user) {
 
@@ -35,11 +34,6 @@ public class CommentService {
         Comment comment = commentRepository.saveAndFlush(new Comment(requestDto, user, board));
 
         return new CommentResponseDto(comment);
-    }
-
-    @Transactional(readOnly = true)
-    public List<Comment> getComments(Long boardId) {
-        return commentRepository.findAllByBoardIdOrderByCreatedAtDesc(boardId);
     }
 
     @Transactional
@@ -71,6 +65,53 @@ public class CommentService {
         } else {
             throw new IllegalArgumentException("작성자만 삭제/수정할 수 있습니다.");
         }
+    }
+
+    @Transactional
+    public ResponseEntity<Map<String, HttpStatus>> loveOk(Long id, User user) {
+
+        User user1 = userRepository.findById(user.getId()).orElseThrow(
+                () -> new IllegalArgumentException("유저가 존재하지 않습니다.")
+        );
+        Comment comment = commentRepository.findById(id).orElseThrow(
+                () -> new IllegalArgumentException("댓글이 존재하지 않습니다.")
+        );
+
+        List<CommentLove> commentLoveList = user1.getCommentLoveList();
+
+        if (user != null) {
+
+            for (CommentLove commentLoves : commentLoveList) {
+                if (commentLoves.getComment().getId() == comment.getId() && commentLoves.getUser().getId() == user1.getId()) {
+                    if (commentLoves.isLove() == false) {
+                        commentLoves.update();
+                        comment.LoveOk();
+                        return new ResponseEntity("댓글을 좋아요 했습니다.", HttpStatus.OK);
+                    } else {
+                        commentLoves.update();
+                        comment.LoveCancel();
+                        return new ResponseEntity("좋아요를 취소 했습니다.", HttpStatus.OK);
+                    }
+                } else {
+                    CommentLove commentLove = new CommentLove(comment, user1);
+                    commentLoveRepository.save(commentLove);
+                    commentLove.update();
+                    comment.LoveOk();
+                    return new ResponseEntity("댓글을 좋아요 했습니다.", HttpStatus.OK);
+                }
+            }
+            if(commentLoveList.size() == 0){
+                CommentLove commentLove = new CommentLove(comment, user1);
+                commentLoveRepository.save(commentLove);
+                commentLove.update();
+                comment.LoveOk();
+                return new ResponseEntity("댓글을 좋아요 했습니다.", HttpStatus.OK);
+            }
+
+        } else {
+            throw new IllegalArgumentException("로그인 유저만 좋아요할 수 있습니다.");
+        }
+        return null;
     }
 }
 

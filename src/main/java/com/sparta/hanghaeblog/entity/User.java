@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -26,10 +27,14 @@ public class User {
     @Enumerated(value = EnumType.STRING)
     private UserRoleEnum role;
 
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
+    private List<BoardLove> boarLoveList;
+
+    @OneToMany(mappedBy = "user")
+    private List<CommentLove> commentLoveList;
     public User(String username, String password, UserRoleEnum role) {
         this.username = username;
         this.password = password;
         this.role = role;
     }
-
 }

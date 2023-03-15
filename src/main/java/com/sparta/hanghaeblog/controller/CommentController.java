@@ -24,15 +24,19 @@ public class CommentController {
         CommentResponseDto comment = commentService.createComment(requestDto,id,userDetails.getUser());
         return comment;
     }
-    @PutMapping("/api/boards/comment/{id}")
+    @PutMapping("/api/boards/comments/{id}")
     public ResponseEntity<Map<String, HttpStatus>> updateComment(@PathVariable Long id, @RequestBody CommentRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return commentService.update(id, requestDto, userDetails.getUser());
     }
 
-    @DeleteMapping("/api/boards/comment/{id}")
+    @DeleteMapping("/api/boards/comments/{id}")
     public ResponseEntity<Map<String, HttpStatus>> deleteComment(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         ResponseEntity<Map<String,HttpStatus>> responseEntity = commentService.deleteComment(id,userDetails.getUser());
         return responseEntity;
     }
 
+    @PutMapping("/api/boards/comments/{id}/loves")
+    public ResponseEntity<Map<String, HttpStatus>> BoardLoveOk(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return commentService.loveOk(id, userDetails.getUser());
+    }
 }

@@ -10,5 +10,6 @@ public class BoardRequestDto {
     private String title;
     private String username;
     private String contents;
+    private int love;
     private List<Comment> commentList;
 }

@@ -14,6 +14,7 @@ public class BoardResponseDto {
     private String username;
     private String contents;
     private LocalDateTime createdAt;
+    private int love;
     private List<CommentResponseDto> commentList = new ArrayList<>();
 
     public BoardResponseDto(Board board) {
@@ -28,6 +29,7 @@ public class BoardResponseDto {
         this.contents = board.getContents();
         this.id = board.getId();
         this.createdAt = board.getCreatedAt();
+        this.love = board.getLove();
         this.commentList = commentList;
     }
 }
