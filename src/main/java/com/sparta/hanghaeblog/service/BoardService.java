@@ -63,7 +63,9 @@ public class BoardService {
     public BoardResponseDto getBoard(long id) {
         Board board = boardRepository.findById(id).orElseThrow(
                 () -> new IllegalArgumentException("게시글이 존재하지 않습니다."));
-        BoardResponseDto responseDto = new BoardResponseDto(board, getCommentResponseList(board));
+        List<CommentResponseDto> commentList = getCommentResponseList(board);
+        Collections.reverse(commentList);
+        BoardResponseDto responseDto = new BoardResponseDto(board, commentList);
         return responseDto;
     }
 
