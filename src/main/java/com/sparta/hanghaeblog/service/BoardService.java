@@ -126,25 +126,17 @@ public class BoardService {
                         board.LoveCancel();
                         return new ResponseEntity("좋아요를 취소 했습니다.", HttpStatus.OK);
                     }
-                } else {
-                    BoardLove boardLove = new BoardLove(board, user1);
-                    boardLoveRepository.save(boardLove);
-                    boardLove.update();
-                    board.LoveOk();
-                    return new ResponseEntity("게시글을 좋아요 했습니다.", HttpStatus.OK);
                 }
             }
-            if(boardLoveList.size() == 0){
+
                 BoardLove boardLove = new BoardLove(board, user1);
                 boardLoveRepository.save(boardLove);
                 boardLove.update();
                 board.LoveOk();
                 return new ResponseEntity("게시글을 좋아요 했습니다.", HttpStatus.OK);
-            }
 
         } else {
             throw new IllegalArgumentException("로그인 유저만 좋아요할 수 있습니다.");
         }
-        return null;
     }
 }

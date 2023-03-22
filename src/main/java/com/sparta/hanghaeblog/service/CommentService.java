@@ -92,26 +92,17 @@ public class CommentService {
                         comment.LoveCancel();
                         return new ResponseEntity("좋아요를 취소 했습니다.", HttpStatus.OK);
                     }
-                } else {
-                    CommentLove commentLove = new CommentLove(comment, user1);
-                    commentLoveRepository.save(commentLove);
-                    commentLove.update();
-                    comment.LoveOk();
-                    return new ResponseEntity("댓글을 좋아요 했습니다.", HttpStatus.OK);
                 }
             }
-            if(commentLoveList.size() == 0){
                 CommentLove commentLove = new CommentLove(comment, user1);
                 commentLoveRepository.save(commentLove);
                 commentLove.update();
                 comment.LoveOk();
                 return new ResponseEntity("댓글을 좋아요 했습니다.", HttpStatus.OK);
-            }
 
         } else {
             throw new IllegalArgumentException("로그인 유저만 좋아요할 수 있습니다.");
         }
-        return null;
     }
 }
 
